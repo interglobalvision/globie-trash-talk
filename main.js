@@ -43,18 +43,15 @@ blog.userInfo(function(error, data) {
 
 globieBot = new slack(slackApi, true, false);
 
-// LISTEN FOR SIGNIN
+// LISTEN FOR SIGNIN & ERROR
 
-globieBot.on('error', function(hello) {
-
-  console.log(hello);
-
+globieBot.on('error', function(error) {
+  console.log('Slack error:');
+  console.log(error);
 });
 
 globieBot.on('open', function() {
-
   console.log('Connected to Slack');
-
 });
 
 // LISTEN FOR MESSAGES
@@ -62,23 +59,35 @@ globieBot.on('open', function() {
 globieBot.on('message', function(message) {
   channel = globieBot.getChannelGroupOrDMByID(message.channel)
   if (channel.name === 'b') {
+
+    console.log(message.text);
+
     var random = getRandom();
-
-    console.log(random);
-
     if (random === 1) {
 
-      blog.text(blogName, {
-        body: message.text
-      }, function(error, result) {
-          if (error) {
-            console.log(error);
-          }
-          console.log(result);
-      });
+      // HERE WE NEED TO DECIDE WHAT KIND OF POST TO CREATE
+
+      // IF THE MESSAGE HAS A <***> URL ENDING WITH .PNG or .GIF or .JPG/JPEG WE SHOULD CREATE AN IMAGE POST
+
+      // IF THE MESSAGE HAS A <***> ULR WITHOUT THAT ENDING WE SHOULD CREATE A LINK POST
+
+      // OTHERWISE WE SHOULD CREATE TEXT POST
+
+      if (message.text) {
+
+        blog.text(blogName, {
+          body: message.text
+        }, function(error, result) {
+            if (error) {
+              console.log(error);
+            }
+            console.log(result);
+        });
+
+      }
 
     }
-//     console.log(message.text);
+
   }
 
 });
