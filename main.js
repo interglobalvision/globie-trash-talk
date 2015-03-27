@@ -15,7 +15,7 @@ var oauth = {
   token_secret: process.env.TOKEN_SECRET
 };
 
-var blog = process.env.BLOG;
+var blogName = process.env.BLOG;
 
 var randomNumberOptions = {
   min:  1,
@@ -36,7 +36,7 @@ blog.userInfo(function(error, data) {
     console.log(error);
   }
   console.log(data);
-  console.log(data.blogs);
+  console.log(data.user.blogs);
 });
 
 // SETUP SLACK
@@ -68,7 +68,7 @@ globieBot.on('message', function(message) {
 
     if (random === 1) {
 
-      blog.text(blog, {
+      blog.text(blogName, {
         body: message.text
       }, function(error, result) {
           if (error) {
