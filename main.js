@@ -19,7 +19,7 @@ var blog = process.env.BLOG;
 
 var randomNumberOptions = {
   min:  1,
-  max:  2,
+  max:  process.env.PROBABILTY,
   integer: true
 }
 
