@@ -60,7 +60,7 @@ globieBot.on('message', function(message) {
   channel = globieBot.getChannelGroupOrDMByID(message.channel)
   if (channel.name === 'b') {
 
-    console.log(message.text);
+//     console.log(message.text);
 
     var random = getRandom();
     if (random === 1) {
@@ -69,22 +69,59 @@ globieBot.on('message', function(message) {
 
       // IF THE MESSAGE HAS A <***> URL ENDING WITH .PNG or .GIF or .JPG/JPEG WE SHOULD CREATE AN IMAGE POST
 
-      // IF THE MESSAGE HAS A <***> ULR WITHOUT THAT ENDING WE SHOULD CREATE A LINK POST
+      var images = /((?:https?\:\/\/)(?:[a-zA-Z]{1}(?:[\w\-]+\.)+(?:[\w]{2,5}))(?:\:[\d]{1,5})?\/(?:[^\s\/]+\/)*(?:[^\s]+\.(?:jpe?g|gif|png))(?:\?\w+=\w+(?:&\w+=\w+)*)?)/.exec(message.text);
+      var urls = /(\<.*\>)/.exec(message.text);
 
-      // OTHERWISE WE SHOULD CREATE TEXT POST
+      if (images) {
 
-      if (message.text) {
-
-        blog.text(blogName, {
-          body: message.text
+        blog.photo(blogName, {
+          source: images[0],
+          caption: message.text
         }, function(error, result) {
             if (error) {
               console.log(error);
             }
+            console.log('POSTED TO TUMBLR AS IMAGE. ID:');
             console.log(result);
         });
 
-      }
+    	} else if (urls) {
+
+      // IF THE MESSAGE HAS A <***> ULR WITHOUT THAT ENDING WE SHOULD CREATE A LINK POST
+
+        cleanUrl = urls[0].substring(1, (urls[0].length-1))
+
+        blog.link(blogName, {
+          url: cleanUrl,
+          caption: message.text
+        }, function(error, result) {
+            if (error) {
+              console.log(error);
+            }
+            console.log('POSTED TO TUMBLR AS LINK. ID:');
+            console.log(result);
+        });
+
+    	} else {
+
+      // OTHERWISE WE SHOULD CREATE TEXT POST
+
+      	if (message.text) {
+
+          blog.text(blogName, {
+            body: message.text
+          }, function(error, result) {
+              if (error) {
+                console.log(error);
+              }
+              console.log('POSTED TO TUMBLR AS TEXT. ID:');
+              console.log(result);
+          });
+
+        }
+
+    	}
+
 
     }
 
