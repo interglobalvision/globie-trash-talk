@@ -4,7 +4,10 @@
 
 #Run this shit like:
 
-- Install forever globially via node
-- `npm install`
-- Get ur variables in a twist
-- `SLACK_API=* CONSUMER_KEY=* CONSUMER_SECRET=* TOKEN=* TOKEN_SECRET=* BLOG=* PROBABILTY=* forever start main.js`
+```
+npm install
+cp .env.example .env
+node main.js
+```
+
+Add ur variables to `.env`

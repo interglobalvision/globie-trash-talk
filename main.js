@@ -1,3 +1,6 @@
+// env
+var dotenv = require('dotenv');
+dotenv.load();
 // NPM
 
 var slack = require('slack-client'),

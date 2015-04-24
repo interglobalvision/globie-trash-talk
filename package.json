@@ -14,6 +14,7 @@
   "author": "interglobal.vision",
   "license": "ISC",
   "devDependencies": {
+    "dotenv": "^1.1.0",
     "random-number": "0.0.6",
     "slack-client": "^1.4.0",
     "tumblr": "^0.4.1",
