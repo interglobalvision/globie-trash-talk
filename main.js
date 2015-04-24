@@ -35,8 +35,8 @@ blog.userInfo(function(error, data) {
   if (error) {
     console.log(error);
   }
-  console.log(data);
-  console.log(data.user.blogs);
+  //console.log(data);
+  //console.log(data.user.blogs);
 });
 
 // SETUP SLACK
@@ -60,11 +60,13 @@ globieBot.on('message', function(message) {
   channel = globieBot.getChannelGroupOrDMByID(message.channel)
   if (channel.name === 'b') {
 
-//     console.log(message.text);
+    //console.log(message);
 
     var random = getRandom();
     if (random === 1) {
+      var user = globieBot.getUserByID(message.user);
 
+      user.name = user.name || '';
       // HERE WE NEED TO DECIDE WHAT KIND OF POST TO CREATE
 
       // IF THE MESSAGE HAS A <***> URL ENDING WITH .PNG or .GIF or .JPG/JPEG WE SHOULD CREATE AN IMAGE POST
@@ -76,7 +78,8 @@ globieBot.on('message', function(message) {
 
         blog.photo(blogName, {
           source: images[0],
-          caption: message.text
+          caption: message.text,
+          tags: user.name,
         }, function(error, result) {
             if (error) {
               console.log(error);
@@ -93,7 +96,8 @@ globieBot.on('message', function(message) {
 
         blog.link(blogName, {
           url: cleanUrl,
-          caption: message.text
+          caption: message.text,
+          tags: user.name,
         }, function(error, result) {
             if (error) {
               console.log(error);
@@ -104,18 +108,20 @@ globieBot.on('message', function(message) {
 
     	} else {
 
-      // OTHERWISE WE SHOULD CREATE TEXT POST
+        // OTHERWISE WE SHOULD CREATE TEXT POST
 
-      	if (message.text) {
+        if (message.text) {
 
           blog.text(blogName, {
-            body: message.text
+            body: message.text,
+            tags: user.name,
           }, function(error, result) {
-              if (error) {
-                console.log(error);
-              }
-              console.log('POSTED TO TUMBLR AS TEXT. ID:');
-              console.log(result);
+            if (error) {
+              console.log(error);
+            }
+            user.name = user.name || '';
+            console.log('POSTED TO TUMBLR AS TEXT. ID:');
+            console.log(result);
           });
 
         }
